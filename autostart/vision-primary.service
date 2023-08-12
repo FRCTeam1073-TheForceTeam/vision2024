@@ -1,0 +1,15 @@
+# Vision Primary Service
+[Unit]
+Description=FRC 1073 Vision Primary Service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=jetson
+WorkingDirectory=/home/jetson/nanovision2023/server
+ExecStart=/home/jetson/nanovision2023/server/vision-server.py /dev/video1 FrontVision 10.10.73.5 5801
+
+[Install]
+WantedBy=multi-user.target
