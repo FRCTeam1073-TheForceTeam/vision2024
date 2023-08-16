@@ -4,7 +4,7 @@ Vision code and setup for 2023/2024 season.
 # Hardware Setup:
 
 This season we're going to try out some newly available Mini-PC systems
-as our hardware platform and set them up on Ubuntu 22.04 Linux as
+as our hardware platform and set them up on Ubuntu 23.04 Linux as
 our software platform.
 
 Our first hardware machine is:
@@ -16,13 +16,15 @@ ethernet to connect to the robot network as well as the media
 acceleration features of the Intel platform.
 
 
-
 # Software Setup:
 
 The machines come with Windows 11 but we boot into the BIOS and
-install Ubuntu 22.04 LTS as our base operating system and then' we
-need to install a bunch of software packages for writing and running
-robot perception cdoe.
+install Ubuntu 23.04 as our base operating system and then' we need to
+install a bunch of software packages for writing and running robot
+perception cdoe. We picked Ubuntu 23.04 because the gstreamer / vaapi
+configurations for Ubuntu 22.04 were botched in some way and nearly
+all hardware encoding is disabled in standard packages on that version
+of the platform.
 
 Some of the key things we want to be able to do this year with our
 software include:
@@ -59,7 +61,7 @@ just to make sure cameras are going to work with our setup.
 
 ## Python3 Development Envirobnment:
 
-   sudo apt-get install python3 python-is-python3 python3-pip
+   sudo apt-get install python3 python-is-python3 python3-pip python3-full pipx
 
 This gives us latest Ubuntu version of Python3, makes it the default
 and adds the pip tool for installing python specific pacakges.
@@ -99,4 +101,6 @@ Last, but not least, we need to pull in networktables in python so we
 can easily talk to subsystems on the robot to get data, etc.
 
     pip3 install pynetworktables
+
+
 
