@@ -33,6 +33,20 @@ software include:
   - Handle multiple AprilTag trackers for alignment and navigation landmarks.
   - Game-piece detection and tracking.
 
+
+## Miniconda Install:
+We need to use a python enviorment to run our camera programs, and the latest version of ubuntu will not support what we are trying to do. 
+To get the code to work install miniconda (https://docs.conda.io/en/main/miniconda.html).
+
+  mkdir -p ~/miniconda3
+  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o ~/miniconda3/miniconda.sh
+  bash ./Miniconda3-latest-Linux-x86_64.sh -b -u -p ~/miniconda3
+  ~/miniconda3/bin/conda init bash 
+  conda create -n vision python=3.11
+  conda activate vision
+
+## NOW YOU INSTALL EVERYTHING ELSE INTO THIS VIRTUAL ENVIORMENT
+
 ## Basic Dev Package Installation:
 
    sudo apt-get update
