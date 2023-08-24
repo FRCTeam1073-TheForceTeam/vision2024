@@ -43,6 +43,7 @@ To get the code to work install miniconda (https://docs.conda.io/en/main/minicon
   bash ./Miniconda3-latest-Linux-x86_64.sh -b -u -p ~/miniconda3
   ~/miniconda3/bin/conda init bash 
   conda create -n vision python=3.11
+  source /.bashrc
   conda activate vision
 
 ## NOW YOU INSTALL EVERYTHING ELSE INTO THIS VIRTUAL ENVIORMENT
