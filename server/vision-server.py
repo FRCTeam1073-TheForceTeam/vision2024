@@ -19,13 +19,16 @@ destinationPort=sys.argv[4]
 
 # Capture Video and set resolution from gstreamer pipeline
 #capture_pipeline = "nvarguscamerasrc do-timestamp=true ! video/x-raw(memory:NVMM),format=(string)NV12,width=(int)1920,height=(int)1080,framerate=30/1 ! nvvidconv flip-method=0 ! video/x-raw,width=(int)640,height=(int)360,format=(string)BGRx ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True drop=true"#capture_pipeline = "nvarguscamerasrc do-timestamp=true ! video/x-raw(memory:NVMM),format=(string)NV12,width=(int)1920,height=(int)1080,framerate=30/1 ! nvvidconv flip-method=0 ! video/x-raw,width=(int)640,height=(int)360,format=(string)BGRx ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True drop=true"
-capture_pipeline = "v4l2src device=%s ! video/x-raw,format=(string)UYVY,width=(int)1280,height=(int)720,framerate=60/1 ! videorate drop-only=true,max-rate=30 ! videoscale ! video/x-raw,width=(int)640,height=(int)360 ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True,drop=true"%(captureDevice)
+capture_pipeline = "v4l2src device=%s ! video/x-raw,format=(string)UYVY,width=(int)1280,height=(int)720,framerate=60/1 ! videorate drop-only=true max-rate=30 ! videoscale ! video/x-raw,width=(int)640,height=(int)360 ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True drop=true"%(captureDevice)
+print(capture_pipeline)
 capture = cv2.VideoCapture(capture_pipeline)
+print("Created Capture")
 
 # Video output streaming to gstreamer pipeline
-output_pipeline = "appsrc ! videoconvert ! video/x-raw,format=(string)UYVY ! vaapih264enc ! video/x-h264, framerate=30/1, stream-format=(string)byte-stream bitrate=(int)600, rate-control(int)2, profile(string)main ! rtph264pay config-interval=1 mtu=1000 ! udpsink host=%s port=%s"%(destinationIP, destinationPort)
+output_pipeline = "appsrc ! videoconvert ! video/x-raw,format=(string)UYVY ! vaapih264enc ! video/x-h264,framerate=30/1,stream-format=(string)byte-stream,bitrate=(int)600,rate-control(int)2,profile(string)main ! rtph264pay config-interval=1 mtu=1000 ! udpsink host=%s port=%s"%(destinationIP, destinationPort)
 
 output = cv2.VideoWriter(output_pipeline, cv2.CAP_GSTREAMER, 30, (640, 360))
+print("Video Output")
 
 print("OpenCV Version " + cv2.__version__)
 print("CUDA %d"%(cv2.cuda.getCudaEnabledDeviceCount()))
