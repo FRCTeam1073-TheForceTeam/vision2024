@@ -18,6 +18,43 @@ acceleration features of the Intel platform.
 
 # Software Setup:
 
+Go to GitHub.com
+--> Settings
+--> Click on SSH and GPG Keys
+https://docs.github.com/authentication/connecting-to-github-with-ssh
+--> Click "generate ssh key" (the link above)
+https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+--> Click link above (Generating a new SSH Key and adding it to the ssh-agent)
+--> Run 
+  ssh-keygen -t ed25519 -C "your_email@example.com"
+--> Fill in your email (whatever email you use for github)
+--> Find the key you just made 
+  cd .ssh
+  cat (your key name).pub
+--> Copy the key and put it in the spot on the Github textbox for the SSH Key (the big one)
+--> CONGRATULATIONS YOU HAVE MADE YOUR KEY!!!
+--> Go to this awesome and cool link: 
+https://docs.github.com/en/authentication/troubleshooting-ssh/using-ssh-over-the-https-port
+--> Type
+  nano config
+--> Paste this awesome thing:
+  Host github.com
+    Hostname ssh.github.com
+    Port 443
+    User git
+--> Ctrl O and then CTRL X
+--> Run:
+  ssh -T git@github.com
+--> then it should say "Hi [username]"
+--> Go back to Github, click on profile picture, go to organizations, click on 1073.
+--> Then, click on the repository that you are working on
+--> Click on the big green CODE button
+--> Click SSH and copy the link (it should be like this)
+git@github.com:FRCTeam1073-TheForceTeam/vision2024.git
+--> Run:
+  git clone git@github.com:FRCTeam1073-TheForceTeam/vision2024.git
+-->
+
 The machines come with Windows 11 but we boot into the BIOS and
 install Ubuntu 23.04 as our base operating system and then' we need to
 install a bunch of software packages for writing and running robot
