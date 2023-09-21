@@ -3,7 +3,7 @@
 import numpy as np
 import cv2
 import math
-import apriltag
+from apriltag import apriltag
 from networktables import NetworkTables
 import sys
 import time
@@ -25,7 +25,7 @@ capture = cv2.VideoCapture(capture_pipeline)
 print("Created Capture")
 
 # Video output streaming to gstreamer pipeline
-output_pipeline = "appsrc ! videoconvert ! video/x-raw,format=(string)UYVY ! vaapih264enc ! video/x-h264,framerate=30/1,stream-format=(string)byte-stream,bitrate=(int)600,rate-control(int)2,profile(string)main ! rtph264pay config-interval=1 mtu=1000 ! udpsink host=%s port=%s"%(destinationIP, destinationPort)
+output_pipeline = "appsrc ! videoconvert ! video/x-raw,format=(string)UYVY ! vaapih264enc ! video/x-h264,framerate=30/1,stream-format=(string)byte-stream,bitrate=(int)600,rate-control(int)2,profile(string)main ! rtph264pay config-interval=1 ! udpsink host=%s port=%s"%(destinationIP, destinationPort)
 
 output = cv2.VideoWriter(output_pipeline, cv2.CAP_GSTREAMER, 30, (640, 360))
 print("Video Output")
@@ -43,8 +43,8 @@ if output.isOpened():
 else:
     print("Video output pipeline creation failed!")
 
-detectorOptions = apriltag.DetectorOptions(families="tag16h5")
-detector = apriltag.Detector(detectorOptions)
+#detectorOptions = apriltag.DetectorOptions(families="tag16h5")
+detector = apriltag("tag16h5")
 
 networkTableIP = "10.10.73.2"
 
@@ -76,7 +76,8 @@ while(True):
 
     # Draw target lines over the video.
     for tag in tags:
-        (ptA, ptB, ptC, ptD) = tag.corners;
+        # print(tag)
+        (ptA, ptB, ptC, ptD) = (tag['lb-rb-rt-lt'][0], tag['lb-rb-rt-lt'][1], tag['lb-rb-rt-lt'][2], tag['lb-rb-rt-lt'][3]);
         height = abs(ptA[1] - ptC[1])
         width =  abs(ptA[0] - ptC[0])
         if height > 10 and width > 10:
@@ -90,23 +91,20 @@ while(True):
             cv2.line(frame, ptC, ptD, (0,0,250), 2)
             cv2.line(frame, ptD, ptA, (0,0,250), 2)
 
-            (cX, cY) = (int(tag.center[0]), int(tag.center[1]))
+            (cX, cY) = (int(tag['center'][0]), int(tag['center'][1]))
             cv2.circle(frame, (cX,cY), 5, (0,0,255), -1)
 
-            tagId = "{}".format(tag.tag_id)
+            tagId = "{}".format(tag['id'])
 
             cv2.putText(frame, tagId, (ptA[0], ptA[1]-15),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
 
-            tagOutput+= [tag.tag_id, tag.hamming, tag.goodness, tag.decision_margin,
-            tag.homography[0][0], tag.homography[0][1], tag.homography[0][2],
-            tag.homography[1][0], tag.homography[1][1], tag.homography[1][2],
-            tag.homography[2][0], tag.homography[2][1], tag.homography[2][2],
-            tag.center[0], tag.center[1],
-            tag.corners[0][0], tag.corners[0][1],
-            tag.corners[3][0], tag.corners[3][1],
-            tag.corners[2][0], tag.corners[2][1],
-            tag.corners[1][0], tag.corners[1][1]]
+            tagOutput+= [tag['id'], tag['hamming'],tag['margin'],
+            tag['center'][0], tag['center'][1],
+            ptA[0], ptA[1],
+            ptB[0], ptB[1],
+            ptC[0], ptC[1],
+            ptD[0], ptD[1]]
 
 
    #connects with Network Tables, grabs number of tags found
