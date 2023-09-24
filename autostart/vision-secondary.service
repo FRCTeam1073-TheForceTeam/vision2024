@@ -7,9 +7,9 @@ After=network.target
 Type=simple
 Restart=always
 RestartSec=1
-User=jetson
-WorkingDirectory=/home/jetson/nanovision2023/server
-ExecStart=/home/jetson/nanovision2023/server/vision-server.py /dev/video0 RearVision 10.10.73.5 5802
+User=frc1073
+WorkingDirectory=/home/frc1073/vision2024/server
+ExecStart=/home/frc1073/vision2024/server/vision-server.py /dev/video0 RearVision 10.10.73.5 5802
 
 [Install]
 WantedBy=multi-user.target
