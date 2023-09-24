@@ -72,15 +72,20 @@ software include:
 
 ## Basic Dev Package Installation:
 
->   sudo apt-get update
->   sudo apt-get install emacs screen build-essential git-core nano wget cmake
-
+```
+   sudo apt-get update
+```
+```
+   sudo apt-get install emacs screen build-essential git-core nano wget cmake
+```
 
 These are the packages for C/C++ compilers, build tools and basic text editing.
 
 ## System Management:
 
->   sudo apt-get install cockpit
+```
+   sudo apt-get install cockpit
+```
 
 This provides us with a web-based management console for when the
 systems are on the robot and without a screen/keyboard available. For
@@ -90,7 +95,9 @@ https://cockpit-project.org/
 
 ## Camera Debug Tools:
 
->   sudo apt-get install yavta guvcview
+```
+   sudo apt-get install yavta guvcview
+```   
 
 These are two tools, one a command line V4L2 camera
 debugging/management tool and the other is a graphical camera viewer
@@ -98,16 +105,27 @@ just to make sure cameras are going to work with our setup.
 
 ## Python3 Development Envirobnment:
 
->   sudo apt-get install python3 python-is-python3 python3-pip python3-full pipx
+```
+   sudo apt-get install python3 python-is-python3 python3-pip python3-full pipx
+```   
 
 This gives us latest Ubuntu version of Python3, makes it the default
 and adds the pip tool for installing python specific pacakges.
 
 ## Video Codec and GStreamer:
 
->   sudo apt-get install libavformat-dev libavcodec-dev libswscale-dev ffmpeg
+Basic video libraries:
+
+```
+   sudo apt-get install libavformat-dev libavcodec-dev libswscale-dev ffmpeg
    vainfo
->   sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio gstreamer1.0-vaapi
+```
+
+Gstreamer 1.0 support:
+
+```
+   sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio gstreamer1.0-vaapi
+```   
 
 
 This installs commonly available codec libraries, tools for the VAAPI
@@ -116,18 +134,28 @@ including accelerated video codecs.
 
 ## Python3 Environment Extras:
 
->   sudo apt-get install python3-ipython ipython3 python3-opencv idle
+
+This pulls in a lot of standard python3 libraries, OpenCV bindings for
+python3 and the Python code editor IDLE.
+
+```
+   sudo apt-get install python3-ipython ipython3 python3-opencv idle
+```   
 
 This pulls in a lot of common Python3 tools and libraries like numpy
 and matplotlib, etc. as well as OpenCV for Python3.
 
 Now we can pull in the april tag wrapper driver:
 
->    pip3 install apriltag
+```
+    pip3 install apriltag
+```    
 
 ## Network Tables:
 
 Last, but not least, we need to pull in networktables in python so we
 can easily talk to subsystems on the robot to get data, etc.
 
->    pip3 install pynetworktables
+```
+    pip3 install pynetworktables
+```
