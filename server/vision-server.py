@@ -18,20 +18,18 @@ destinationIP=sys.argv[3]
 destinationPort=sys.argv[4]
 
 # Capture Video and set resolution from gstreamer pipeline
-#capture_pipeline = "nvarguscamerasrc do-timestamp=true ! video/x-raw(memory:NVMM),format=(string)NV12,width=(int)1920,height=(int)1080,framerate=30/1 ! nvvidconv flip-method=0 ! video/x-raw,width=(int)640,height=(int)360,format=(string)BGRx ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True drop=true"#capture_pipeline = "nvarguscamerasrc do-timestamp=true ! video/x-raw(memory:NVMM),format=(string)NV12,width=(int)1920,height=(int)1080,framerate=30/1 ! nvvidconv flip-method=0 ! video/x-raw,width=(int)640,height=(int)360,format=(string)BGRx ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True drop=true"
 capture_pipeline = "v4l2src device=%s ! video/x-raw,format=(string)UYVY,width=(int)1280,height=(int)720,framerate=60/1 ! videorate drop-only=true max-rate=30 ! videoscale ! video/x-raw,width=(int)640,height=(int)360 ! videoconvert ! video/x-raw,format=(string)BGR ! appsink emit-signals=True drop=true"%(captureDevice)
 print(capture_pipeline)
 capture = cv2.VideoCapture(capture_pipeline)
-print("Created Capture")
+print("Created Video Capture for %s"%(captureDevice))
 
 # Video output streaming to gstreamer pipeline
-output_pipeline = "appsrc ! videoconvert ! video/x-raw,format=(string)UYVY ! vaapih264enc ! video/x-h264,framerate=30/1,stream-format=(string)byte-stream,bitrate=(int)600,rate-control(int)2,profile(string)main ! rtph264pay config-interval=1 ! udpsink host=%s port=%s"%(destinationIP, destinationPort)
+output_pipeline = "appsrc ! video/x-raw,format=BGR,width=(int)640,height=(int)360,framerate=30/1 ! queue max-size-buffers=2 ! videoconvert ! vaapih264enc ! video/x-h264,framerate=30/1,stream-format=(string)byte-stream,bitrate=(int)900,rate-control=(int)6,profile=(string)main ! rtph264pay config-interval=1 ! udpsink host=%s port=%s"%(destinationIP, destinationPort)
 
 output = cv2.VideoWriter(output_pipeline, cv2.CAP_GSTREAMER, 30, (640, 360))
-print("Video Output")
+print("Created Video Output sending to %s"%(destinationIP))
 
 print("OpenCV Version " + cv2.__version__)
-print("CUDA %d"%(cv2.cuda.getCudaEnabledDeviceCount()))
 
 if capture.isOpened():
     print("Capture input pipeline created successfully...")
@@ -43,14 +41,12 @@ if output.isOpened():
 else:
     print("Video output pipeline creation failed!")
 
-#detectorOptions = apriltag.DetectorOptions(families="tag16h5")
 detector = apriltag("tag16h5")
 
+# Default network table server address is the robo-rio
 networkTableIP = "10.10.73.2"
 
-# networktables.startClientTeam(1073)
-# init network tables and "points" it at your robot [via robotpy]
-
+# init network tables and "points" it at the robot:
 NetworkTables.initialize(server=networkTableIP)
 
 # Create network table with given table name:
@@ -60,21 +56,22 @@ table = NetworkTables.getTable(networkTable)
 # Main vision loop:
 while(True):
 
-   # print("[INFO] loading image...")
     # Capture frame-by-frame:
     ret, frame = capture.read()
 
-    # Create greyscale image from input:
+    # Convert frame to a greyscale image for tag detector:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+    # Run april-tag detector and get back tags:
     tags = detector.detect(image);
 
     if len(tags) > 0:
         print("{} total tags detected".format(len(tags)))
-
+        
+    # Python list of data output data we're going to send over network tables.
     tagOutput = []
 
-    # Draw target lines over the video.
+    # Parse the tags we get back into our output format:
     for tag in tags:
         # print(tag)
         (ptA, ptB, ptC, ptD) = (tag['lb-rb-rt-lt'][0], tag['lb-rb-rt-lt'][1], tag['lb-rb-rt-lt'][2], tag['lb-rb-rt-lt'][3]);
@@ -85,7 +82,8 @@ while(True):
             ptC = (int(ptC[0]), int(ptC[1]))
             ptD = (int(ptD[0]), int(ptD[1]))
             ptA = (int(ptA[0]), int(ptA[1]))
-
+            
+            # Draw detection lines over the video.
             cv2.line(frame, ptA, ptB, (0,0,250), 2)
             cv2.line(frame, ptB, ptC, (0,0,250), 2)
             cv2.line(frame, ptC, ptD, (0,0,250), 2)
