@@ -84,7 +84,7 @@ These are the packages for C/C++ compilers, build tools and basic text editing.
 ## System Management:
 
 ```
-   sudo apt-get install cockpit
+   sudo apt-get install cockpit openssh-server
 ```
 
 This provides us with a web-based management console for when the
