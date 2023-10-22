@@ -148,14 +148,47 @@ and matplotlib, etc. as well as OpenCV for Python3.
 Now we can pull in the april tag wrapper driver:
 
 ```
-    pip3 install apriltag
+    sudo apt-get install python3-apriltag
 ```    
 
 ## Network Tables:
 
 Last, but not least, we need to pull in networktables in python so we
-can easily talk to subsystems on the robot to get data, etc.
+can easily talk to subsystems on the robot to get data into our robot code.
+This requires that we clone and install python network tables locally for
+each account on the system.
+
+Ideally you make a Projects directory in your home directory and go there:
 
 ```
-    pip3 install pynetworktables
+    cd
+    mkdir Projects
+    cd Projects
 ```
+
+Then you clone the python network tables project into your Projects directory like this:
+
+```
+    git clone https://github.com/robotpy/pynetworktables.git
+```
+
+Then you go into the pynetworktables directory and build/install python networktables for
+your user account:
+
+```
+    cd pynetworktables
+    python3 ./setup.py instal --user
+```
+
+# Checking out our configuration:
+
+Once you have gone through these setup steps, you should be able to open up
+a Python3 interpreter in your shell and import things like OpenCV, Apriltags
+and Network tables successfully. If you have done this, then you are all
+set up to write Python-based vision code that talks to robot code using network tables.
+
+So you can try running:
+   - python3
+   - Then type: 'import cv2' this will load opencv
+   - Then type: 'import apriltag' this will load the Apriltag library
+   - Then type: 'import networktables` this will load networktables.
