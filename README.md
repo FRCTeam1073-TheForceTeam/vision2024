@@ -70,6 +70,12 @@ software include:
   - Handle multiple AprilTag trackers for alignment and navigation landmarks.
   - Game-piece detection and tracking.
 
+Note: Please note that once a machine is set up properly all you need to do for an additional
+account on the machine is the SSH/Github setup above and the local installation of
+_pynetworktables_ below. You do not need to duplicate any of the apt-get installation
+steps for additional accounts on a machine.
+
+
 ## Basic Dev Package Installation:
 
 ```
