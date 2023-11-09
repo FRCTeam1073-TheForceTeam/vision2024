@@ -35,12 +35,14 @@ Go to GitHub.com:
      - Run: ``nano config``
      - Cut and paste this config to use SSH over HTTPS for github:
      
-       Host github.com
-           Hostname ssh.github.com
-    	   Port 443
-    	   User git
+```
+Host github.com
+    Hostname ssh.github.com
+    Port 443
+    User git
+```
 
-      - Type: Ctrl-O and then CTRL-X to save your ``~/.ssh/config`` file
+- Type: Ctrl-O and then CTRL-X to save your ``~/.ssh/config`` file
 - Now we're going to test your connection, so run the following in the shell:
   - ``ssh -T git@github.com``
   - then it should say "Hi [username]"
@@ -183,7 +185,7 @@ your user account:
 
 ```
     cd pynetworktables
-    python3 ./setup.py instal --user
+    python3 ./setup.py install --user
 ```
 
 # Checking out our configuration:
@@ -198,3 +200,4 @@ So you can try running:
    - Then type: 'import cv2' this will load opencv
    - Then type: 'import apriltag' this will load the Apriltag library
    - Then type: 'import networktables` this will load networktables.
+
