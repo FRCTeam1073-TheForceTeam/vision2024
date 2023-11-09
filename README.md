@@ -126,7 +126,7 @@ Basic video libraries:
 
 ```
    sudo apt-get install libavformat-dev libavcodec-dev libswscale-dev ffmpeg
-   vainfo
+   vainfo v4l-utils
 ```
 
 Gstreamer 1.0 support:
