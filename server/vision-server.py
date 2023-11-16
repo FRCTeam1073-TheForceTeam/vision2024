@@ -67,7 +67,7 @@ while(True):
 
     if len(tags) > 0:
         print("{} total tags detected".format(len(tags)))
-        
+
     # Python list of data output data we're going to send over network tables.
     tagOutput = []
 
@@ -82,7 +82,7 @@ while(True):
             ptC = (int(ptC[0]), int(ptC[1]))
             ptD = (int(ptD[0]), int(ptD[1]))
             ptA = (int(ptA[0]), int(ptA[1]))
-            
+
             # Draw detection lines over the video.
             cv2.line(frame, ptA, ptB, (0,0,250), 2)
             cv2.line(frame, ptB, ptC, (0,0,250), 2)
