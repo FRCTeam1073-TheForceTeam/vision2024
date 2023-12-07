@@ -49,12 +49,11 @@ networkTableIP = "10.10.73.2"
 # init network tables and "points" it at the robot:
 NetworkTables.initialize(server=networkTableIP)
 
-#Create corner model points
-modelPoints = [(-1,-1), (1,-1), (1,1), (-1, 1)]
-
 # Create network table with given table name:
 table = NetworkTables.getTable(networkTable)
 
+# create apriltag corner model points
+modelPoints = [(-1,-1), (1, -1), (1, 1), (-1, 1)]
 
 # Main vision loop:
 while(True):
@@ -95,25 +94,25 @@ while(True):
             (cX, cY) = (int(tag['center'][0]), int(tag['center'][1]))
             cv2.circle(frame, (cX,cY), 5, (0,0,255), -1)
 
-	    cornerPoints = [(ptA[0], ptA[1]), (ptB[0], ptB[1]), (ptC[0], ptC[1]), (ptD[0], ptD[1])]
-
-	    homography = (cornerPoints, modelPoints, cv2.RANSAC, 5.0)
-
             tagId = "{}".format(tag['id'])
 
             cv2.putText(frame, tagId, (ptA[0], ptA[1]-15),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
+
+	    cornerPoints = [(ptA[0], ptA[1]), (ptB[0], ptB[1]), (ptC[0], ptC[1]), (ptD[0], ptD[1])]
+
+	    homography = cv2.findHomography(cornerPoints, modelPoints, cv2.RANSAC, 5.0)
 
             tagOutput+= [tag['id'], tag['hamming'],tag['margin'],
             tag['center'][0], tag['center'][1],
             ptA[0], ptA[1],
             ptB[0], ptB[1],
             ptC[0], ptC[1],
-            ptD[0], ptD[1]],
+            ptD[0], ptD[1], 
 	    homography[0][0],
 	    homography[0][1],
 	    homography[0][2],
-            homography[1][0],
+	    homography[1][0],
 	    homography[1][1],
 	    homography[1][2],
 	    homography[2][0],
