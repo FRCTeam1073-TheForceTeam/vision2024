@@ -50,7 +50,7 @@ networkTableIP = "10.10.73.2"
 NetworkTables.initialize(server=networkTableIP)
 
 #Create corner model points
-modelPoints = [(-1,-1), (1,-1), (1,1), (-1, 1)]
+modelPoints = np.array([[1,-1], [-1,-1], [-1,1], [1,1]])
 
 # Create network table with given table name:
 table = NetworkTables.getTable(networkTable)
@@ -80,7 +80,9 @@ while(True):
         (ptA, ptB, ptC, ptD) = (tag['lb-rb-rt-lt'][0], tag['lb-rb-rt-lt'][1], tag['lb-rb-rt-lt'][2], tag['lb-rb-rt-lt'][3]);
         height = abs(ptA[1] - ptC[1])
         width =  abs(ptA[0] - ptC[0])
-        if height > 10 and width > 10:
+        aspect = width/(height + 1.0)
+        print("Height:%d Width:%d Aspect:%f"%(height, width, aspect))
+        if height > 15 and width > 15 and aspect > 0.5 and aspect < 2.0:
             ptB = (int(ptB[0]), int(ptB[1]))
             ptC = (int(ptC[0]), int(ptC[1]))
             ptD = (int(ptD[0]), int(ptD[1]))
@@ -95,30 +97,32 @@ while(True):
             (cX, cY) = (int(tag['center'][0]), int(tag['center'][1]))
             cv2.circle(frame, (cX,cY), 5, (0,0,255), -1)
 
-	    cornerPoints = [(ptA[0], ptA[1]), (ptB[0], ptB[1]), (ptC[0], ptC[1]), (ptD[0], ptD[1])]
+            cornerPoints = np.array([[ptA[0],ptA[1]], [ptB[0],ptB[1]], [ptC[0],ptC[1]], [ptD[0],ptD[1]]])
 
-	    homography = (cornerPoints, modelPoints, cv2.RANSAC, 5.0)
+            homography = cv2.findHomography(cornerPoints, modelPoints, cv2.RANSAC, 5.0)
+
+            #print(homography)
 
             tagId = "{}".format(tag['id'])
 
             cv2.putText(frame, tagId, (ptA[0], ptA[1]-15),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
-
+            #corners in counter-clock wise order
             tagOutput+= [tag['id'], tag['hamming'],tag['margin'],
             tag['center'][0], tag['center'][1],
             ptA[0], ptA[1],
             ptB[0], ptB[1],
             ptC[0], ptC[1],
-            ptD[0], ptD[1]],
-	    homography[0][0],
-	    homography[0][1],
-	    homography[0][2],
-            homography[1][0],
-	    homography[1][1],
-	    homography[1][2],
-	    homography[2][0],
-	    homography[2][1],
-	    homography[2][2]]
+            ptD[0], ptD[1],
+            homography[0][0][0],
+            homography[0][0][1],
+            homography[0][0][2],
+            homography[0][1][0],
+            homography[0][1][1],
+            homography[0][1][2],
+            homography[0][2][0],
+            homography[0][2][1],
+            homography[0][2][2]]
 
    #connects with Network Tables, grabs number of tags found
     table.putNumberArray("Tags1", tagOutput)
