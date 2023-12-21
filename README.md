@@ -11,6 +11,8 @@ Our first hardware machine is:
 
 https://www.amazon.com/GMKtec-Nucbox5-Desktop-Computer-Windows/dp/B0B75PT2RY/ref=sr_1_3?keywords=GMKtec%2Bmini-pc&qid=1691854541&sr=8-3&th=1
 
+Camera Specs: https://m.media-amazon.com/images/W/MEDIAX_792452-T2/images/I/61e3D9swX4L._AC_SL1250_.jpg
+
 This provides us with a quad-core processor, 3 USB3 ports and hardline
 ethernet to connect to the robot network as well as the media
 acceleration features of the Intel platform.
